@@ -1,7 +1,10 @@
 import { safeJsonParse, safeJsonStringify } from 'safe-json-utils';
 
-import { IKeyValueStorage, KeyValueStorageOptions } from '../shared';
-import { getReactNativeOptions } from '../shared/utils';
+import {
+  IKeyValueStorage,
+  KeyValueStorageOptions,
+  getReactNativeOptions,
+} from '../shared';
 
 import { IAsyncStorage } from './types';
 

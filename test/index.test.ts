@@ -12,8 +12,7 @@ const TEST_REACT_NATIVE_OPTIONS = {
 
 // const TEST_NODE_JS_OPTIONS = {
 //   ['node-js']: {
-//     sequelize: ":memory:",
-//     tableName: "test-table",
+//     database: ":memory:",
 //   },
 // };
 

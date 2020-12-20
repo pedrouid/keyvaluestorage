@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { Database } from 'better-sqlite3';
 
 import { IAsyncStorage } from '../react-native/types';
 
@@ -7,8 +7,7 @@ export interface ReactNativeStorageOptions {
 }
 
 export interface NodeJSStorageOptions {
-  sequelize: string | Sequelize;
-  tableName: string;
+  database: string | Database;
 }
 
 export interface KeyValueStorageOptionsReactNative {

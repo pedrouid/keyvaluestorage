@@ -41,6 +41,7 @@
     "prepare": "yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^5.4.1",
     "@types/jest": "25.1.1",
     "@types/node": "13.7.0",
     "deepmerge": "4.2.2",
@@ -63,8 +64,8 @@
     "trailingComma": "es5"
   },
   "dependencies": {
+    "better-sqlite3": "^7.1.2",
     "localStorage": "^1.0.4",
-    "safe-json-utils": "^1.1.1",
-    "sequelize": "^6.3.5"
+    "safe-json-utils": "^1.1.1"
   }
 }
