@@ -2,6 +2,18 @@ import merge from 'deepmerge';
 
 import { IAsyncStorage, AsyncStorageTypes } from '../../src/react-native/types';
 
+/**
+ * Ported from NPM package mock-async-storage source code
+ * https://github.com/devmetal/mock-async-storage/blob/0a13a4b0a15fcc5bb0bef5db7f74af7a333071d2/src/mockAsyncStorage.ts
+ *
+ * name: mock-async-storage
+ * description: Its a mock of react-native AsyncStorage for jest tests
+ * version: 2.0.5
+ * author: Metál Ádám <devmetal91@gmail.com> (https://github.com/devmetal)
+ * license: MIT
+ *
+ */
+
 const isStringified = (str: string): boolean => {
   try {
     JSON.parse(str);
