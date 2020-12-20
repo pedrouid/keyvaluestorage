@@ -2,7 +2,6 @@ import { DataTypes, Op, Sequelize, Transaction } from 'sequelize';
 import { mkdirSync } from 'fs';
 import { dirname } from 'path';
 
-import { STORE_DEFAULT } from '../constants';
 import { IKeyValueStorage } from '../shared';
 
 export class KeyValueStorage implements IKeyValueStorage {
@@ -16,28 +15,9 @@ export class KeyValueStorage implements IKeyValueStorage {
 
   constructor(
     _sequelize: string | Sequelize,
-    private readonly prefix: string = STORE_DEFAULT.PREFIX,
-    private readonly separator: string = STORE_DEFAULT.SEPARATOR,
-    private readonly tableName: string = STORE_DEFAULT.DATABASE_TABLE_NAME
+    private readonly tableName: string
   ) {
-    if (typeof _sequelize === 'string') {
-      if ((_sequelize as string).startsWith('sqlite:')) {
-        const dbPath = (_sequelize as string).split('sqlite:').pop();
-        if (dbPath !== STORE_DEFAULT.SQLITE_MEMORY_STORE_STRING) {
-          const dir = dirname(dbPath || '');
-          mkdirSync(dir, { recursive: true });
-        } else {
-          // see comments in prop declaration
-          this.shouldUseTransaction = false;
-        }
-      }
-      this.sequelize = new Sequelize(_sequelize as string, {
-        logging: false,
-        isolationLevel: Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED,
-      });
-    } else {
-      this.sequelize = _sequelize as Sequelize;
-    }
+    this.sequelize = this.setSequelize(_sequelize);
     this.KeyValueStorageData = this.sequelize.define(this.tableName, {
       key: {
         type: new DataTypes.STRING(1024),
@@ -63,30 +43,19 @@ export class KeyValueStorage implements IKeyValueStorage {
     return this.sequelize.close();
   }
 
-  getKey(...args: string[]): string {
-    return args.join(this.separator);
-  }
-
   async getKeys(): Promise<string[]> {
     const relevantItems = await this.getRelevantItems();
-    return relevantItems.map(
-      (item: any) => item.key.split(`${this.prefix}${this.separator}`)[1]
-    );
+    return relevantItems.map((item: any) => item.key.split(``)[1]);
   }
 
   async getEntries(): Promise<[string, any][]> {
     const relevantItems = await this.getRelevantItems();
-    return relevantItems.map(item => [
-      item.key.replace(`${this.prefix}${this.separator}`, ''),
-      item.value,
-    ]);
+    return relevantItems.map(item => [item.key.replace(``, ''), item.value]);
   }
 
   async getItem<T>(key: string): Promise<T | undefined> {
     try {
-      const item = await this.KeyValueStorageData.findByPk(
-        `${this.prefix}${this.separator}${key}`
-      );
+      const item = await this.KeyValueStorageData.findByPk(`${key}`);
       // TODO: fix type casting
       return item && (item.value as any);
     } catch (e) {
@@ -99,7 +68,7 @@ export class KeyValueStorage implements IKeyValueStorage {
       try {
         await this.KeyValueStorageData.upsert(
           {
-            key: `${this.prefix}${this.separator}${key}`,
+            key: `${key}`,
             value,
           },
           options
@@ -119,7 +88,7 @@ export class KeyValueStorage implements IKeyValueStorage {
     const execute = async (options = {}) => {
       try {
         await this.KeyValueStorageData.destroy(
-          { where: { key: `${this.prefix}${this.separator}${key}` } },
+          { where: { key: `${key}` } },
           options
         );
       } catch (e) {
@@ -141,13 +110,36 @@ export class KeyValueStorage implements IKeyValueStorage {
       return this.KeyValueStorageData.findAll({
         where: {
           key: {
-            [Op.startsWith]: `${this.prefix}${this.separator}`,
+            [Op.startsWith]: ``,
           },
         },
       });
     } catch (e) {
       throw new Error(`getRelevantItems() failed: ${e.message}`);
     }
+  }
+
+  private setSequelize(_sequelize: string | Sequelize): Sequelize {
+    let sequelize: Sequelize;
+    if (typeof _sequelize === 'string') {
+      if ((_sequelize as string).startsWith('sqlite:')) {
+        const dbPath = (_sequelize as string).split('sqlite:').pop();
+        if (dbPath !== ':memory:') {
+          const dir = dirname(dbPath || '');
+          mkdirSync(dir, { recursive: true });
+        } else {
+          // see comments in prop declaration
+          this.shouldUseTransaction = false;
+        }
+      }
+      sequelize = new Sequelize(_sequelize as string, {
+        logging: false,
+        isolationLevel: Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED,
+      });
+    } else {
+      sequelize = _sequelize as Sequelize;
+    }
+    return sequelize;
   }
 }
 
