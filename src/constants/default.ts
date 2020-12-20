@@ -1,5 +1,4 @@
 export const STORE_DEFAULT = {
-  ASYNC_STORAGE_KEY: 'STORE',
   DATABASE_TABLE_NAME: 'key_value_storage_data',
   PREFIX: 'KEY_VALUE_STORAGE',
   SEPARATOR: '/',
