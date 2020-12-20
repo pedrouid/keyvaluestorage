@@ -4,6 +4,19 @@ import ReactNativeStorage from '../src/react-native';
 
 import MockAsyncStorage from './mock/asyncstorage';
 
+const TEST_REACT_NATIVE_OPTIONS = {
+  ['react-native']: {
+    asyncStorage: new MockAsyncStorage(),
+  },
+};
+
+// const TEST_NODE_JS_OPTIONS = {
+//   ['node-js']: {
+//     sequelize: ":memory:",
+//     tableName: "test-table",
+//   },
+// };
+
 describe('KeyValueStorage', () => {
   // TODO: fix unit tests
   it('browser', async () => {
@@ -20,7 +33,7 @@ describe('KeyValueStorage', () => {
   it('react-native', async () => {
     const key = 'yolo';
     const value = { data: true };
-    const store = new ReactNativeStorage(new MockAsyncStorage());
+    const store = new ReactNativeStorage(TEST_REACT_NATIVE_OPTIONS);
     await store.init();
     await store.setItem(key, value);
     const result = await store.getItem<typeof value>(key);
@@ -32,7 +45,7 @@ describe('KeyValueStorage', () => {
     // TODO: fix NodeJS keyvaluestorage tests
     // const key = 'yolo';
     // const value = { data: true };
-    // const store = new NodeJSStorage(':memory:', 'test-table');
+    // const store = new NodeJSStorage(TEST_NODE_JS_OPTIONS);
     // await store.init();
     // await store.setItem(key, value);
     // const result = await store.getItem<typeof value>(key);

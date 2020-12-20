@@ -2,23 +2,23 @@ import { DataTypes, Op, Sequelize, Transaction } from 'sequelize';
 import { mkdirSync } from 'fs';
 import { dirname } from 'path';
 
-import { IKeyValueStorage } from '../shared';
+import { IKeyValueStorage, KeyValueStorageOptions } from '../shared';
+import { getNodeJSOptions } from '../shared/utils';
 
 export class KeyValueStorage implements IKeyValueStorage {
   public sequelize: Sequelize;
   private KeyValueStorageData: any;
+
   // FIXME: Using transactions in the memory store passes the store tests
   // but fails in the integration tests. This only happens for memory store,
   // and there are similarly reported issues. See:
   // https://github.com/sequelize/sequelize/issues/8759
   private shouldUseTransaction: boolean = true;
 
-  constructor(
-    _sequelize: string | Sequelize,
-    private readonly tableName: string
-  ) {
-    this.sequelize = this.setSequelize(_sequelize);
-    this.KeyValueStorageData = this.sequelize.define(this.tableName, {
+  constructor(opts?: KeyValueStorageOptions) {
+    const options = getNodeJSOptions(opts);
+    this.sequelize = this.setSequelize(options.sequelize);
+    this.KeyValueStorageData = this.sequelize.define(options.tableName, {
       key: {
         type: new DataTypes.STRING(1024),
         primaryKey: true,

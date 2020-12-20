@@ -1,11 +1,17 @@
 import { safeJsonParse, safeJsonStringify } from 'safe-json-utils';
 
-import { IKeyValueStorage } from '../shared';
+import { IKeyValueStorage, KeyValueStorageOptions } from '../shared';
+import { getReactNativeOptions } from '../shared/utils';
 
 import { IAsyncStorage } from './types';
 
 export class KeyValueStorage implements IKeyValueStorage {
-  constructor(private readonly asyncStorage: IAsyncStorage) {}
+  private readonly asyncStorage: IAsyncStorage;
+
+  constructor(opts?: KeyValueStorageOptions) {
+    const options = getReactNativeOptions(opts);
+    this.asyncStorage = options.asyncStorage;
+  }
 
   init(): Promise<void> {
     return Promise.resolve();
