@@ -22,7 +22,6 @@ export type KeyValueStorageOptions = Partial<
   KeyValueStorageOptionsReactNative & KeyValueStorageOptionsNodeJS
 >;
 export abstract class IKeyValueStorage {
-  constructor(opts?: KeyValueStorageOptions) {}
   public abstract init(): Promise<void>;
   public abstract close(): Promise<void>;
   public abstract getKeys(): Promise<string[]>;

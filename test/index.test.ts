@@ -5,6 +5,7 @@ import ReactNativeStorage from '../src/react-native';
 import MockAsyncStorage from './mock/asyncstorage';
 
 const TEST_REACT_NATIVE_OPTIONS = {
+  // eslint-disable-next-line no-useless-computed-key
   ['react-native']: {
     asyncStorage: new MockAsyncStorage(),
   },
