@@ -11,16 +11,8 @@ export interface NodeJSStorageOptions {
   tableName?: string;
 }
 
-export interface KeyValueStorageOptionsReactNative {
-  ['react-native']: ReactNativeStorageOptions;
-}
-
-export interface KeyValueStorageOptionsNodeJS {
-  ['node-js']: NodeJSStorageOptions;
-}
-
 export type KeyValueStorageOptions = Partial<
-  KeyValueStorageOptionsReactNative & KeyValueStorageOptionsNodeJS
+  ReactNativeStorageOptions & NodeJSStorageOptions
 >;
 export abstract class IKeyValueStorage {
   public abstract getKeys(): Promise<string[]>;

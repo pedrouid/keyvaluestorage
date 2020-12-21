@@ -1,18 +1,16 @@
 import { safeJsonParse } from 'safe-json-utils';
 import {
   KeyValueStorageOptions,
-  KeyValueStorageOptionsNodeJS,
-  KeyValueStorageOptionsReactNative,
   NodeJSStorageOptions,
   ReactNativeStorageOptions,
 } from './types';
 
-export const REACT_NATIVE_OPTIONS_KEY = 'react-native';
+export const REACT_NATIVE_REQUIRED_OPTION = 'asyncStorage';
 
 export function isReactNativeOptions(
   opts: KeyValueStorageOptions
-): opts is KeyValueStorageOptionsReactNative {
-  return REACT_NATIVE_OPTIONS_KEY in opts;
+): opts is ReactNativeStorageOptions {
+  return REACT_NATIVE_REQUIRED_OPTION in opts;
 }
 
 export function getReactNativeOptions(
@@ -20,27 +18,29 @@ export function getReactNativeOptions(
 ): ReactNativeStorageOptions {
   if (typeof opts === 'undefined' || !isReactNativeOptions(opts)) {
     throw new Error(
-      'Missing KeyValueStorage options required for React-Native'
+      `Missing ${REACT_NATIVE_REQUIRED_OPTION} option required for React-Native`
     );
   }
-  return opts[REACT_NATIVE_OPTIONS_KEY];
+  return opts;
 }
 
-export const NODE_JS_OPTIONS_KEY = 'node-js';
+export const NODE_JS_REQUIRED_OPTION = 'database';
 
 export function isNodeJSOptions(
   opts: KeyValueStorageOptions
-): opts is KeyValueStorageOptionsNodeJS {
-  return NODE_JS_OPTIONS_KEY in opts;
+): opts is NodeJSStorageOptions {
+  return NODE_JS_REQUIRED_OPTION in opts;
 }
 
 export function getNodeJSOptions(
   opts?: KeyValueStorageOptions
 ): NodeJSStorageOptions {
   if (typeof opts === 'undefined' || !isNodeJSOptions(opts)) {
-    throw new Error('Missing KeyValueStorage options required for NodeJS');
+    throw new Error(
+      `Missing ${NODE_JS_REQUIRED_OPTION} option required for NodeJS`
+    );
   }
-  return opts[NODE_JS_OPTIONS_KEY];
+  return opts;
 }
 
 export function parseEntry(entry: [string, string]): [string, any] {

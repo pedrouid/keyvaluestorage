@@ -6,17 +6,11 @@ import { IKeyValueStorage } from '../src/shared';
 import MockAsyncStorage from './mock/asyncstorage';
 
 const TEST_REACT_NATIVE_OPTIONS = {
-  // eslint-disable-next-line no-useless-computed-key
-  ['react-native']: {
-    asyncStorage: new MockAsyncStorage(),
-  },
+  asyncStorage: new MockAsyncStorage(),
 };
 
 const TEST_NODE_JS_OPTIONS = {
-  // eslint-disable-next-line no-useless-computed-key
-  ['node-js']: {
-    database: ':memory:',
-  },
+  database: ':memory:',
 };
 
 describe('KeyValueStorage', () => {
