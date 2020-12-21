@@ -23,6 +23,7 @@ describe('KeyValueStorage', () => {
   const key = 'yolo';
   const value = { legacy: 'carpe diem' };
   let store: IKeyValueStorage;
+
   describe('browser', () => {
     beforeAll(async () => {
       store = new BrowserStorage();
