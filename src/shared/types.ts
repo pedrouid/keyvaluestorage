@@ -8,6 +8,7 @@ export interface ReactNativeStorageOptions {
 
 export interface NodeJSStorageOptions {
   database: string | Database;
+  tableName?: string;
 }
 
 export interface KeyValueStorageOptionsReactNative {
@@ -22,8 +23,6 @@ export type KeyValueStorageOptions = Partial<
   KeyValueStorageOptionsReactNative & KeyValueStorageOptionsNodeJS
 >;
 export abstract class IKeyValueStorage {
-  public abstract init(): Promise<void>;
-  public abstract close(): Promise<void>;
   public abstract getKeys(): Promise<string[]>;
   public abstract getEntries(): Promise<[string, any][]>;
   public abstract getItem<T = any>(key: string): Promise<T | undefined>;

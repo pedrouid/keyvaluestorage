@@ -1,3 +1,4 @@
+import { safeJsonParse } from 'safe-json-utils';
 import {
   KeyValueStorageOptions,
   KeyValueStorageOptionsNodeJS,
@@ -40,4 +41,8 @@ export function getNodeJSOptions(
     throw new Error('Missing KeyValueStorage options required for NodeJS');
   }
   return opts[NODE_JS_OPTIONS_KEY];
+}
+
+export function parseEntry(entry: [string, string]): [string, any] {
+  return [entry[0], safeJsonParse(entry[1])];
 }
