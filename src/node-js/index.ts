@@ -33,7 +33,7 @@ export class KeyValueStorage implements IKeyValueStorage {
     return keys;
   }
 
-  public async getEntries(): Promise<[string, any][]> {
+  public async getEntries<T = any>(): Promise<[string, T][]> {
     const entries = this.database
       .prepare(this.statements.selectEntries())
       .all()
@@ -41,7 +41,7 @@ export class KeyValueStorage implements IKeyValueStorage {
     return entries;
   }
 
-  public async getItem<T>(key: string): Promise<T | undefined> {
+  public async getItem<T = any>(key: string): Promise<T | undefined> {
     const item = this.database
       .prepare(this.statements.selectValueWhereKey())
       .get(key);
@@ -52,7 +52,7 @@ export class KeyValueStorage implements IKeyValueStorage {
     return safeJsonParse(item.value) as T;
   }
 
-  public async setItem(key: string, value: any): Promise<void> {
+  public async setItem<T = any>(key: string, value: any): Promise<void> {
     this.database
       .prepare(this.statements.replaceInto())
       .run({ key, value: safeJsonStringify(value) });
