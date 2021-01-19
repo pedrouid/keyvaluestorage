@@ -1016,6 +1016,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@pedrouid/timestamp@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pedrouid/timestamp/-/timestamp-1.0.0.tgz#88aeee238b209ba3399e04aced44982d36cb1c68"
+  integrity sha512-m1VOoXLDmsWVEIZzcDEpVfK+X5M3ntJDSGIyPXItBDg02bGg/vT3bWjGIF3aWvPYa42Oqadf95KurIYoon7zfg==
+
 "@rollup/plugin-commonjs@^11.0.0":
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-11.1.0.tgz#60636c7a722f54b41e419e1709df05c7234557ef"
