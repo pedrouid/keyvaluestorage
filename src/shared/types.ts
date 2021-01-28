@@ -1,5 +1,3 @@
-import { Database } from 'better-sqlite3';
-
 import { IAsyncStorage } from '../react-native/types';
 
 export interface ReactNativeStorageOptions {
@@ -7,7 +5,7 @@ export interface ReactNativeStorageOptions {
 }
 
 export interface NodeJSStorageOptions {
-  database: string | Database;
+  database: string;
   tableName?: string;
 }
 
