@@ -1,7 +1,7 @@
 {
   "name": "keyvaluestorage",
   "description": "Isomorphic Key-Value Storage",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "Pedro Gomes <github.com/pedrouid>",
   "license": "MIT",
   "keywords": [
@@ -68,6 +68,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^7.1.2",
+    "keyvaluestorage-interface": "^1.0.0",
     "localStorage": "^1.0.4",
     "safe-json-utils": "^1.1.1"
   }
