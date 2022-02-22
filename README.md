@@ -8,13 +8,17 @@ Isomorphic Key-Value Storage
 import KeyValueStorage from "keyvaluestorage";
 
 const options = {
-  // required for React-Native platform
+  // One of the storage instances is required for React-Native platform
   // package from @react-native-async-storage/async-storage
   asyncStorage: AsyncStorage
-  // required for NodeJS platform
+  // package from mrousavy/react-native-mmkv
+  mmkvStorage: MMKV
+
+// required for NodeJS platform
   // sqlite database connection (in-memory supported)
   database: 'foobar.db'
-  // optional for NodeJS platform
+
+// optional for NodeJS platform
   // sqlite table name (default: 'keyvaluestorage')
   tableName: 'keyvaluestorage'
 }

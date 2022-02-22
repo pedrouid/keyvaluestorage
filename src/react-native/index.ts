@@ -7,27 +7,48 @@ import {
   parseEntry,
 } from '../shared';
 
-import { IAsyncStorage } from './types';
+import { IAsyncStorage, IMMKVStorage } from './types';
+
+function isAsyncStorage(
+  storage: IAsyncStorage | IMMKVStorage
+): storage is IAsyncStorage {
+  return 'multiGet' in storage;
+}
 
 export class KeyValueStorage implements IKeyValueStorage {
-  private readonly asyncStorage: IAsyncStorage;
+  private readonly storage: IAsyncStorage | IMMKVStorage;
 
   constructor(opts?: KeyValueStorageOptions) {
     const options = getReactNativeOptions(opts);
-    this.asyncStorage = options.asyncStorage;
+
+    if ('asyncStorage' in options) {
+      this.storage = options.asyncStorage;
+    } else {
+      this.storage = options.mmkvStorage;
+    }
   }
 
   public async getKeys(): Promise<string[]> {
-    return this.asyncStorage.getAllKeys();
+    return this.storage.getAllKeys();
   }
 
   public async getEntries<T = any>(): Promise<[string, T][]> {
-    const entries = await this.asyncStorage.multiGet(await this.getKeys());
-    return entries.map(parseEntry);
+    const s = this.storage;
+    if (isAsyncStorage(s)) {
+      const entries = await s.multiGet(await this.getKeys());
+      return entries.map(parseEntry);
+    } else {
+      const keys = s.getAllKeys();
+      const mapped = keys.map(k => [k, s.getString(k)] as const);
+      return mapped.map(parseEntry);
+    }
   }
 
   public async getItem<T = any>(key: string): Promise<T | undefined> {
-    const item = await this.asyncStorage.getItem(key);
+    const getter = isAsyncStorage(this.storage)
+      ? this.storage.getItem
+      : this.storage.getString;
+    const item = await getter(key);
     if (typeof item == 'undefined' || item === null) {
       return undefined;
     }
@@ -36,11 +57,17 @@ export class KeyValueStorage implements IKeyValueStorage {
   }
 
   public async setItem<T = any>(key: string, value: T): Promise<void> {
-    await this.asyncStorage.setItem(key, safeJsonStringify(value));
+    const setter = isAsyncStorage(this.storage)
+      ? this.storage.setItem
+      : this.storage.setString;
+    await setter(key, safeJsonStringify(value));
   }
 
   public async removeItem(key: string): Promise<void> {
-    await this.asyncStorage.removeItem(key);
+    const remover = isAsyncStorage(this.storage)
+      ? this.storage.removeItem
+      : this.storage.deleteKey;
+    await remover(key);
   }
 }
 

@@ -1,9 +1,13 @@
-import { IAsyncStorage } from '../react-native/types';
+import { IAsyncStorage, IMMKVStorage } from '../react-native/types';
 
 export { IKeyValueStorage } from 'keyvaluestorage-interface';
-export interface ReactNativeStorageOptions {
-  asyncStorage: IAsyncStorage;
-}
+export type ReactNativeStorageOptions =
+  | {
+      asyncStorage: IAsyncStorage;
+    }
+  | {
+      mmkvStorage: IMMKVStorage;
+    };
 
 export interface NodeJSStorageOptions {
   database: string;
