@@ -43,6 +43,8 @@ export function getNodeJSOptions(
   return opts;
 }
 
-export function parseEntry(entry: [string, string]): [string, any] {
-  return [entry[0], safeJsonParse(entry[1])];
+export function parseEntry(
+  entry: readonly [string, string | undefined]
+): [string, any] {
+  return [entry[0], entry[1] == null ? undefined : safeJsonParse(entry[1])];
 }
